@@ -1,0 +1,2461 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  a4paper,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Libertinus Serif}
+  \setmonofont[Scale=MatchLowercase,Contextuals=Alternate,Ligatures=TeX]{Fira Code}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=25mm]{geometry}
+\usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+\lstset{defaultdialect=[5.3]Lua}
+\lstset{defaultdialect=[x86masm]Assembler}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{xcolor}
+\definecolor{codebg}{HTML}{F7F7F7}
+\definecolor{codeframe}{HTML}{DDDDDD}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+
+\usepackage{bussproofs}
+\usepackage{ifthen}
+\usepackage{lscape}
+\usepackage{graphicx}
+
+\providecommand{\tightlist}{}
+
+\newenvironment{scaledprooftree}[1]
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center}}
+
+
+\usepackage{listings}
+\lstdefinestyle{pandocCode}{
+  backgroundcolor=\color{codebg},
+  frame=none,                  % il frame lo mette tcolorbox
+  framesep=6pt,
+  % margini per tenere tutto dentro la box:
+  xleftmargin=1.2em,           % ← sposta leggermente a destra TUTTO (incl. numeri)
+  xrightmargin=0pt,
+  aboveskip=0pt, belowskip=0pt,
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  numbers=left,                % ← numeri ON
+  numberstyle=\scriptsize\color{gray},
+  numbersep=8pt,               % ← spazio tra numeri e codice
+  tabsize=2,
+}
+\lstset{style=pandocCode}
+
+\lstdefinelanguage{lean}{
+  morekeywords={theorem,lemma,example,def,inductive,structure,namespace,end,
+    intro,intros,assume,suppose,have,show,by,exact,apply,fun,let,match,with},
+  sensitive=true,
+}
+
+\hbadness=10000
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{listings, skins, breakable}
+
+% --- TEOREMA (verde stabile) ---
+\definecolor{teoremabg}{HTML}{E6F4EC}
+\definecolor{teoremaframe}{HTML}{3E8E6D}
+
+% --- PROPOSIZIONE (verde più chiaro) ---
+\definecolor{propbg}{HTML}{EDF7F1}
+\definecolor{propframe}{HTML}{5FAE8B}
+
+% --- OSSERVAZIONE (verde-grigio neutro) ---
+\definecolor{obsbg}{HTML}{EEF3F2}
+\definecolor{obsframe}{HTML}{6F8F87}
+
+% --- DEFINIZIONE (azzurro soft ma visibile) ---
+\definecolor{defbg}{HTML}{E8F1FB}
+\definecolor{defframe}{HTML}{3F7FD6}
+
+% --- ESEMPIO (grigio più deciso) ---
+\definecolor{esempbg}{HTML}{F0F0F2}
+\definecolor{esempframe}{HTML}{6E6E73}
+
+% --- NOTA (rosso tenue ma visibile) ---
+\definecolor{notabg}{HTML}{FBE9E9}
+\definecolor{notaframe}{HTML}{C94F4F}
+
+% --- DIMOSTRAZIONE (giallo caldo ma soft) ---
+\definecolor{proofbg}{HTML}{FFF6DD}
+\definecolor{proofframe}{HTML}{D4A843}
+
+
+% --- STILE BASE ---
+\tcbset{
+  mybox/.style={
+    enhanced,
+    breakable,
+    boxrule=0.4pt,
+    arc=2mm,
+    left=6pt, right=6pt, top=6pt, bottom=6pt,
+    width=\textwidth,
+    before skip=12pt,
+    before=\par\noindent,
+    before upper=\setlength{\parskip}{6pt}\setlength{\parindent}{0pt},
+    fonttitle=\bfseries,
+  }
+}
+
+% --- BOX ---
+
+\newtcolorbox{teoremabox}[1][Teorema]{mybox,
+  colback=teoremabg,
+  colframe=teoremaframe,
+  title=#1
+}
+
+\newtcolorbox{propositionbox}[1][Proposizione]{mybox,
+  colback=propbg,
+  colframe=propframe,
+  title=#1
+}
+
+\newtcolorbox{observationbox}[1][Osservazione]{mybox,
+  colback=obsbg,
+  colframe=obsframe,
+  title=#1
+}
+
+\newtcolorbox{definitionbox}[1][Definizione]{mybox,
+  colback=defbg,
+  colframe=defframe,
+  title=#1
+}
+
+\newtcolorbox{examplebox}[1][Esempio]{mybox,
+  colback=esempbg,
+  colframe=esempframe,
+  title=#1
+}
+
+\newtcolorbox{notebox}[1][Nota]{mybox,
+  colback=notabg,
+  colframe=notaframe,
+  title=#1
+}
+
+\newtcolorbox{proofbox}[1][Dimostrazione]{mybox,
+  colback=proofbg,
+  colframe=proofframe,
+  title=#1
+}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+{\large\textcolor[HTML]{555555}{Università di Bologna}}\\[0.5em]
+{\normalsize\textcolor[HTML]{777777}{Dipartimento di Informatica}}\\[6em]
+
+{\huge\bfseries Algebra e Geometria}\\[0.8em]
+{\huge\bfseries Risposte alle domande di teoria}\\[6em]
+
+{\Large Andrea Manzo}\\[1.2em]
+{\large A.S.\ 2025 / 2026}\\[6em]
+\end{center}
+\end{titlepage}
+
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\newpage
+
+\hypertarget{domande-per-la-prova-di-teoria}{%
+\section{Domande per la prova di
+teoria}\label{domande-per-la-prova-di-teoria}}
+
+\hypertarget{domanda-1}{%
+\subsection{Domanda 1}\label{domanda-1}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Definizione di vettori linearmente indipendenti. Se possibile, fornire
+  esempi dei seguenti vettori, o motivare perché non esistono:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    3 vettori linearmente indipendenti di \(\mathbb{R}^3[x]\);
+  \item
+    3 vettori linearmente dipendenti di \(\mathbb{R}^3[x]\);
+  \item
+    5 vettori linearmente dipendenti di \(\mathbb{R}^3[x]\) che non
+    generano \(\mathbb{R}^3[x]\);
+  \item
+    4 vettori linearmente indipendenti di \(\mathbb{R}^3[x]\) che non
+    generano \(\mathbb{R}^3[x]\).
+  \end{itemize}
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(V\) uno spazio vettoriale. I vettori
+\(v_1, ..., v_n \in V\) si dicono \textbf{linearmente indipendenti} se
+l'unica loro combinazione lineare che dà il vettore nullo è quella con
+coefficienti tutti nulli, cioè: \[
+a_1v_1 + ... + a_n v_n = \underline{0} \quad\Longrightarrow\quad a_1 = a_2 = ... = a_n = 0
+\]
+
+\textbf{Esempi:}
+
+\begin{itemize}
+\tightlist
+\item
+  3 vettori linearmente indipendenti di \(\mathbb{R}^3[x]\): \[
+    \begin{aligned}
+    &p_1 = 1 + x \\
+    &p_2 = 1 + x + x^2 \\
+    &p_3 = 1 + x + x^2 + x^3
+    \end{aligned}
+    \]
+\item
+  3 vettori linearmente dipendenti di \(\mathbb{R}^3[x]\): \[
+    \begin{aligned}
+    &p_1 = 1 + x \\
+    &p_2 = 2 + 2x \\
+    &p_3 = 3 + 3x 
+    \end{aligned}
+    \]
+\item
+  5 vettori linearmente dipendenti di \(\mathbb{R}^3[x]\) che non
+  generano \(\mathbb{R}^3[x]\): \[
+    \begin{aligned}
+    &p_1 = 1 + x \\
+    &p_2 = 2 + 2x \\
+    &p_3 = 3 + 3x \\
+    &p_4 = 1 + x^2 \\
+    &p_5 = 2 + 2x^2
+    \end{aligned}
+    \]
+\item
+  4 vettori linearmente indipendenti di \(\mathbb{R}^3[x]\) che non
+  generano \(\mathbb{R}^3[x]\): Impossibile in quanto
+  \(\mathbb{R}^3[x]\) ha dimensione 4 e perciò, per GEL, 4 vettori
+  linearmente indipendenti costituiscono una base di \(\mathbb{R}^3[x]\)
+  e quindi generano.
+\end{itemize}
+
+\hypertarget{domanda-2}{%
+\subsection{Domanda 2}\label{domanda-2}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Definizione di vettori linearmente indipendenti e di combinazione
+  lineare. Enunciare e dimostrare il teorema: i vettori
+  \(v_1,\ldots,v_n\) di uno spazio vettoriale \(V\) sono linearmente
+  dipendenti se e solo se\ldots{}
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(V\) uno spazio vettoriale, siano
+\(v_1, v_2, \dots, v_n \in V\). Una \textbf{combinazione lineare} di
+\(v_1, \dots, v_n\) è un vettore \(v\) del tipo: \[
+v = a_1v_1 + a_2v_2 + \dots + a_nv_n
+\] con \(a_1, \dots ,a_n \in \mathbb{R}\)
+
+\textbf{Teorema:} I vettori \(v_1, ..., v_n \in V\) sono dipendenti
+\(\iff\) uno di essi è \textbf{combinazione lineare degli altri}.
+
+\textbf{Dimostrazione:}
+
+Dividiamo la dimostrazione:
+
+\(\Rightarrow\) : Per ipotesi \(v_1, ..., v_n\) sono dipendenti, quindi
+esiste una combinazione lineare \[
+a_1v_1 + ... + a_n v_n = \underline{0} 
+\] tale che gli \(a_i\) non sono tutti nulli. Sia \(a_k \neq 0\), allora
+\[
+a_k v_k = - a_1 v_1 -a_2 v_2 - ... - a_{k-1}v_{k-1}-a_{k+1}v_{k+1} -...- a_n v_n
+\] Dividiamo entrambi i membri per \(a_k\): \[
+v_k = - \frac{a_1}{a_k} v_1 - ... - \frac{a_{k-1}}{a_k}v_{k-1} -... - \frac{a_n}{a_k}v_n
+\] Vediamo quindi che \(v_k\) è combinazione lineare di
+\(v_1, ..., v_{k-1}, v_{k+1}, ..., v_n\)
+
+\(\Leftarrow\) : Per ipotesi un vettore \(v_k\) è combinazione lineare
+degli altri, quindi \[
+v_k = a_1 v_1 + a_2 v_2 + ... + a_{k-1}v_{k-1}+a_{k+1}v_{k+1} +...+ a_n v_n
+\] Se aggiungiamo \(-v_k\) a entrambi i membri: \[
+a_1 v_1 + a_2 v_2 + ... + a_{k-1}v_{k-1}-v_k +a_{k+1}v_{k+1} +...+ a_n v_n = \underline{0}
+\] con \(-1 \neq 0\) (il coefficiente di \(v_k\)). I vettori sono
+dipendenti per definizione.
+
+\hypertarget{domanda-3}{%
+\subsection{Domanda 3}\label{domanda-3}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Definizione di \(\langle v_1,\ldots,v_n\rangle\). Dimostrare che
+  \(\langle v_1,\ldots,v_n\rangle\) è un sottospazio.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Dati i vettori \(v_1,\ldots,v_n\) indichiamo con
+\(\langle v_1,\ldots,v_n\rangle\) l'insieme di tutte le combinazioni
+lineari dei vettori \(v_1,\ldots,v_n\) , ovvero: \[
+\langle v_1, \dots, v_n \rangle = \{a_1v_1 + \dots + a_n v_n \mid a_1, \dots, a_n \in \mathbb{R}\}
+\]
+
+\(\langle v_1,\ldots,v_n\rangle\) è detto anche \textbf{sottospazio
+generato} (o span). Infatti dimostriamo ora che è un sottospazio.
+
+\textbf{Dimostrazione:}
+
+Mostriamo che \(\underline{0} \in \langle v_1,\ldots,v_n\rangle\):
+poiché \[
+\underline{0} = 0 v_1 + 0 v_2 + \dots + 0 v_n
+\] è combinazione lineare di \(v_1, \dots, v_n\) allora
+\(\underline{0} \in \langle v_1,\ldots,v_n\rangle\)
+
+Mostriamo che è chiuso rispetto alla somma: sia
+\(x = a_1 v_1 + \dots + a_n v_n\) e sia
+\(y = b_1 v_1 + \dots + b_n v_n\) . Allora: \[
+x + y = a_1 v_1 + \dots + a_n v_ +  b_1 v_1 + \dots + b_n v_n = (a_1 + b_1)v_1 + (a_2 + b_2) v_2 + \dots + (a_n + b_n) v_n
+\] che è ancora una combinazione lineare di \(v_1, \dots, v_n\) perciò
+\(x + y \in \langle v_1,\ldots,v_n\rangle\).
+
+Mostriamo che è chiuso rispetto al prodotto per scalare: sia
+\(x = a_1 v_1 + \dots + a_n v_n\), ,sia \(\lambda \in \mathbb{R}\).
+Allora: \[
+\lambda x = \lambda (a_1 v_1 + \dots + a_n v_n) = \lambda a_1 v_1 + \dots + \lambda a_n v_n
+\] che è ancora una combinazione lineare di \(v_1, \dots, v_n\) perciò
+\(\lambda x \in \langle v_1,\ldots,v_n\rangle\).
+
+\hypertarget{domanda-4}{%
+\subsection{Domanda 4}\label{domanda-4}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Definizione di base di un sottospazio. Esempio di una base di
+  \(\mathbb{R}^3[x]\) diversa dalla base canonica. Dimostrare che uno
+  spazio vettoriale finitamente generato ha sempre una base.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(V\) uno spazio vettoriale. L'insieme
+\(\{v_1, \dots v_n\}\) è una \textbf{base} di \(V\) se:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(V = \langle v_1, \dots , v_n\rangle\), ovvero se \(v_1, \dots, v_n\)
+  generano \(V\)
+\item
+  \(v_1, \dots, v_n\) sono linearmente indipendenti
+\end{enumerate}
+
+\textbf{Esempio:} una base di \(\mathbb{R}^3[x]\) diversa dalla base
+canonica è \(\beta = \{ 3x^3, x^2 + 1, 2x, 5\}\)
+
+\bigskip
+
+Mostriamo che uno spazio vettoriale finitamente generato ha sempre una
+base.
+
+\textbf{Dimostrazione:}
+
+Sia \(V = \langle v_1, ..., v_n \rangle\). Se \(V = \{\underline 0\}\)
+allora una base di \(V\) è \(\emptyset\), altrimenti consideriamo
+\(v_1, ..., v_n\):
+
+\begin{itemize}
+\tightlist
+\item
+  se sono indipendenti abbiamo finito e \(\beta = \{v_1, ..., v_n\}\) è
+  la base cercata
+\item
+  se sono dipendenti invece sappiamo che uno di essi e combinazione
+  lineare degli altri, sia esso \(v_i\). Ma allora: \[
+  V = \langle v_1, ..., v_n \rangle = V = \langle v_1, ..., v_{i-1}, v_{i+1}, ...,  v_n \rangle
+  \] abbiamo cioè rimosso \(v_i\). Ripartiamo con il procedimento.
+\end{itemize}
+
+Dopo un numero finito di passi avremo finito e i vettori che rimangono
+sono base di \(V\).
+
+\hypertarget{domanda-5}{%
+\subsection{Domanda 5}\label{domanda-5}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Definizione di dimensione di uno spazio vettoriale.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} La \textbf{dimensione} di uno spazio vettoriale è
+il numero di elementi di una sua base. Tale valore è unico in quanto
+ogni base ha lo stesso numero di elementi.
+
+\hypertarget{domanda-6}{%
+\subsection{Domanda 6}\label{domanda-6}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Coordinate di un vettore rispetto ad una base ordinata: definizione,
+  esistenza e unicità.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione (e proposizione di esistenza e unicità):} Sia
+\(\beta=\{v_1,\ldots,v_n\}\) una base ordinata per lo spazio vettoriale
+\(V\) e sia \(v\in V\). Allora esiste ed è unica la \(n\)-upla di
+scalari \((\lambda_1,\ldots,\lambda_n)\) tale che\\
+\[  
+v=\lambda_1 v_1+\cdots+\lambda_n v_n
+\] Gli scalari \((\lambda_1,\ldots,\lambda_n)\) si dicono le
+\textbf{coordinate} di \(v\) rispetto alla base ordinata \(\beta\).
+Scriviamo: \[
+(v)_{\beta} = (\lambda_1,\ldots,\lambda_n)
+\]
+
+\textbf{Dimostrazione:} Mostriamo esistenza e unicità delle coordinate:
+
+\begin{itemize}
+\item
+  Esistenza: \(\beta=\{v_1,\ldots,v_n\}\) è base di \(V\), quindi
+  \(V = \langle v_1 ,\dots ,v_n\rangle\), quindi \(v\) è combinazione
+  lineare di \(v_1 ,\dots ,v_n\) cioè esistono
+  \(\lambda_1,\ldots,\lambda_n\) tali che
+  \(v=\lambda_1 v_1+\cdots+\lambda_n v_n\).
+\item
+  Unicità: Sia \[
+  v=\lambda_1 v_1+\cdots+\lambda_n v_n = \gamma_1 v_1+\cdots+\gamma_n v_n
+  \] Quindi: \[
+  \lambda_1 v_1+\cdots+\lambda_n v_n - \gamma_1 v_1-\cdots-\gamma_n v_n = \underline{0}
+  \] perciò, raccogliendo: \[
+    (\lambda_1 - \gamma_1)v_1 + ... + (\lambda_n - \gamma_n)v_n = \underline{0}
+   \] Quindi, siccome \(v_1,\ldots,v_n\) sono indipendenti, per
+  definizione: \[
+    (\lambda_1 - \gamma_1) = (\lambda_2 - \gamma_2) = ... = (\lambda_n - \gamma_n) = \underline{0}
+   \] Perciò: \[
+   \lambda_1 = \gamma_1, \quad \lambda_2 = \gamma_2, \quad ... , \quad \lambda_n = \gamma_n
+   \]
+\end{itemize}
+
+\hypertarget{domanda-7}{%
+\subsection{Domanda 7}\label{domanda-7}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Sia \(U=\langle v_1,\ldots,v_k\rangle\subseteq \mathbb{R}^n\). Perché
+  l'uso dell'algoritmo di Gauss in modo diretto permette di trovare una
+  base di \(U\)?
+\end{enumerate}
+\end{observationbox}
+
+L'uso dell'algoritmo di Gauss in modo diretto permette di trovare una
+base di \(U\) grazie a due proposizioni:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Le righe non nulle di una matrice a scala sono linearmente
+  indipendenti.
+\item
+  Sia \(A \in M_{m \times n}(\mathbb{R})\) , allora le operazioni
+  elementari sulle righe di \(A\) non cambiano il sottospazio generato
+  dalle righe di \(A\) .
+\end{enumerate}
+
+Quindi possiamo costruire una matrice \(A\) che abbia come righe i
+vettori \(v_1,\ldots,v_k\) ed eseguire poi l'algoritmo di Gauss su di
+essa. Alla fine le righe non nulle della matrice a scala \(A'\) saranno
+indipendenti ed essendo che non cambia il sottospazio generato, generano
+sempre \(U\). Essendo indipendenti e generando, per definizione sono una
+base di \(U\).
+
+\hypertarget{domanda-8}{%
+\subsection{Domanda 8}\label{domanda-8}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Siano \(v_1,\ldots,v_k\in \mathbb{R}^n\). Perché l'uso dell'algoritmo
+  di Gauss in modo diretto permette stabilire se \(v_1,\ldots,v_k\) sono
+  linearmente indipendenti?
+\end{enumerate}
+\end{observationbox}
+
+L'uso dell'algoritmo di Gauss in modo diretto permette di stabilire se
+dei vettori sono linearmente indipendenti grazie a due proposizioni:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Le righe non nulle di una matrice a scala sono linearmente
+  indipendenti.
+\item
+  Sia \(A \in M_{m \times n}(\mathbb{R})\) , allora le operazioni
+  elementari sulle righe di \(A\) non cambiano il sottospazio generato
+  dalle righe di \(A\) .
+\end{enumerate}
+
+Sia \(V\) il sottospazio generato da \(v_1,\ldots,v_k\). Possiamo
+costruire una matrice \(A\) che abbia come righe i vettori
+\(v_1,\ldots,v_k\) ed eseguire poi l'algoritmo di Gauss su di essa. Se
+alla fine le righe non nulle della matrice a scala \(A'\) sono sempre
+\(k\) , vuol dire che i vettori \(v_1,\ldots,v_k\) sono indipendenti, in
+quanto le \(k\) righe sono indipendenti e generano sempre \(V\) e perciò
+sono una base di \(V\) e perciò \(V\) ha dimensione \(k\) e perciò
+essendo \(v_1,\ldots,v_k\) generatori, sono una base e quindi
+indipendenti.
+
+\hypertarget{domanda-9}{%
+\subsection{Domanda 9}\label{domanda-9}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  Equazioni cartesiane di un sottospazio \(W\) di \(\mathbb{R}^n\) e
+  motivazione teorica del loro calcolo a partire da un insieme di
+  generatori di \(W\).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(W\) il sottospazio tale che: \[
+W=\{x\in\mathbb{R}^n \mid A\underline{x}=\underline{0}\}
+\] per una qualche matrice \(A\in M_{k\times n}(\mathbb{R})\). Allora,
+le equazioni del sistema lineare omogeneo
+\(A\underline{x}=\underline{0}\) prendono il nome di \textbf{equazioni
+cartesiane} di \(W\).
+
+\textbf{Calcolo delle equazioni cartesiane:}
+
+Siano \(v_1,\dots,v_m\in\mathbb{R}^n\) tali che
+\(W=\langle v_1,\dots,v_m\rangle\) . Allora \[
+W=
+\{
+\lambda_1 v_1 +\cdots+\lambda_m v_m
+\mid
+\lambda_1,\dots,\lambda_m \in\mathbb{R}
+\}
+\]
+
+Sia \(B\in M_{n\times m}(\mathbb{R})\) la matrice che ha come colonne i
+vettori \(v_1,\dots,v_m\). Un vettore \[
+x=(x_1,\dots,x_n)\in\mathbb{R}^n
+\] appartiene a \(V\) se e solo se esistono
+\(\lambda_1,\dots,\lambda_m\in\mathbb{R}\) tali che \[
+x=\lambda_1v_1+\cdots+\lambda_mv_m
+\] Equivalentemente, esiste \[
+\lambda=(\lambda_1,\dots,\lambda_m)\in\mathbb{R}^m
+\] tale che \[
+B\lambda=x
+\] Per il teorema di Rouché-Capelli, ciò equivale a richiedere che: \[
+\operatorname{rk}(B)=\operatorname{rk}(B|x)
+\]
+
+Applicando l'algoritmo di Gauss alla matrice aumentata \((B|x)\), si
+ottiene una matrice della forma
+
+\[
+\begin{pmatrix}
+\bullet & \cdots & \cdots & \;\;|\;\cdots \\
+0 & \bullet & \cdots & \;\;|\;\cdots \\
+0 & 0 & \bullet & \;\;|\;\cdots \\
+0 & 0 & 0 & |\;\diamond \\
+0 & 0 & 0 & |\;\diamond
+\end{pmatrix}
+\]
+
+dove:
+
+\begin{itemize}
+\tightlist
+\item
+  i simboli \(\bullet\) indicano i pivot di riga;
+\item
+  i simboli \(\diamond\) indicano espressioni lineari nelle variabili
+  \(x_1,\dots,x_n\).
+\end{itemize}
+
+Per avere \(\operatorname{rk}(B)=\operatorname{rk}(B|x)\) è sufficiente
+imporre che tutte le espressioni indicate con \(\diamond\) siano nulle.
+
+Le equazioni così ottenute sono le equazioni cartesiane del sottospazio
+\(W\).
+
+\hypertarget{domanda-10}{%
+\subsection{Domanda 10}\label{domanda-10}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  Definizione di applicazione lineare e di nucleo. Dimostrare che una
+  applicazione lineare è iniettiva se e solo se il suo nucleo contiene
+  solo il vettore nullo.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Siano \(V, W\) due spazi vettoriali, sia
+\(F: V \to W\) una funzione. \(F\) si dice \textbf{applicazione lineare}
+se:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(F(v_1 + v_2) = F(v_1) + F(v_2)\)
+\item
+  \(F(\lambda v) = \lambda F(v)\)
+\end{enumerate}
+
+\textbf{Definizione:} Sia \(F: V \to W\) una applicazione lineare,
+chiamiamo \textbf{nucleo} o \textbf{kernel} di \(F\) l'insieme: \[
+\text{Ker}(F) = \{v \in V \mid F(v) = \underline{0}\}
+\]
+
+\textbf{Dimostrazione:}
+
+Mostriamo che \(F\) è iniettiva
+\(\iff \text{Ker}(F) = \{\underline{0}\}\):
+
+\(\Rightarrow\) : Per ipotesi \(F\) è iniettiva, quindi
+\(F(u) = F(v) \Longrightarrow u = v, \; \forall u, v \in V\) .
+
+Sia \(v \in \text{Ker}(F)\), perciò per definizione
+\(F(v) = \underline{0}\) . Inoltre, essendo \(F\) lineare, sappiamo
+anche che \(F(\underline{0}) = \underline{0}\), ma allora, per
+definizione di iniettività, \(v = \underline{0}\), perciò
+\(\text{Ker}(F) = \{\underline{0}\}\)
+
+\(\Leftarrow\): Per ipotesi \(\text{Ker}(F) = \{\underline{0}\}\) .
+Dobbiamo mostrare che
+\(F(u) = F(v) \Longrightarrow u = v, \; \forall u, v \in V\). Notiamo
+che: \[
+F(u) = F(v) \Longrightarrow F(u) - F(v) = \underline{0}  \Longrightarrow F(u - v) = \underline{0}
+\] Ma allora per definizione di kernel e per le ipotesi: \[
+u -v \in \text{Ker}(F) \Longrightarrow u - v = \underline{0} \Longrightarrow u = v
+\]
+
+\hypertarget{domanda-11}{%
+\subsection{Domanda 11}\label{domanda-11}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{10}
+\tightlist
+\item
+  Definizione di applicazione lineare e immagine. Completare e
+  dimostrare l'enunciato: se \(F:V\to W\) è un'applicazione lineare e
+  \(B=\{\ldots\}\) è una base di \ldots, allora
+  \(\text{Im}(F)=\langle\ldots\rangle\).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Siano \(V, W\) due spazi vettoriali, sia
+\(F: V \to W\) una funzione. \(F\) si dice \textbf{applicazione lineare}
+se:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(F(v_1 + v_2) = F(v_1) + F(v_2)\)
+\item
+  \(F(\lambda v) = \lambda F(v)\)
+\end{enumerate}
+
+\textbf{Definizione:} Sia \(F: V \to W\) una applicazione lineare, si
+chiama \textbf{immagine} di \(F\) l'insieme: \[
+\text{Im}(F) = \{F(v) \mid v \in V\} = \{w \in W \mid w = F(v), v \in V\}
+\]
+
+\textbf{Teorema:} se \(F:V\to W\) è un'applicazione lineare e
+\(\beta=\{ v_1, \dots, v_n\}\) è una base di \(V\) allora
+\(\text{Im}(F)=\langle F(v_1), \dots ,F(v_n)\rangle\)
+
+\textbf{Dimostrazione:}
+
+Sappiamo che: \[
+\text{Im}(L) = \{L(v) \mid v \in V\} = S_1
+\] e che: \[
+\langle L(v_1), \dots , L(v_n) \rangle = \{\lambda_1 L(v_1) + \dots + \lambda_n L(v_n) \mid (\lambda_1, \dots \lambda_n \in \mathbb{R}\} = S_2
+\] Vogliamo mostrare che \(S_1 = S_2\).
+
+\begin{itemize}
+\item
+  Mostriamo che \(S_1 \subseteq S_2\) :
+
+  Sia \(w \in S_1\) , perciò \(w = L(v)\) con
+  \(v \in V = \langle v_1, \dots, v_n \rangle\) ,
+  \(v = \lambda_1 v_1 + \dots + \lambda_n v_n\) . Allora: \[
+   w = L(v) = L(\lambda_1 v_1 + \dots + \lambda_n v_n) = \lambda_1 L(v_1) + \dots + \lambda_n L(v_n)
+   \] Perciò \(w \in \langle L(v_1), \dots , L(v_n) \rangle = S_2\) .
+\item
+  Mostriamo che \(S_2 \subseteq S_1\):
+
+  Sia \(w \in S_2\), perciò
+  \(w = \lambda_1 L(v_1) + \dots + \lambda_n L(v_n)\) . Allora: \[
+   w = \lambda_1 L(v_1) + \dots + \lambda_n L(v_n) = L(\lambda_1 v_1 + \dots + \lambda_n v_n)
+   \] Perciò \(w \in \text{Im}(L) = S_1\).
+\end{itemize}
+
+Quindi abbiamo dimostrato \(S_1 = S_2\) .
+
+\hypertarget{domanda-12}{%
+\subsection{Domanda 12}\label{domanda-12}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{11}
+\tightlist
+\item
+  Data una matrice \(A\in M_{m,n}(\mathbb{R}^n)\), definire
+  l'applicazione lineare \(L_A\) ad essa associata e dare la motivazione
+  teorica del calcolo del suo nucleo.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} sia \(A \in M_{m\times n}(\mathbb{R})\) ,
+definiamo l'applicazione lineare \(L_A\): \[
+L_A : \mathbb{R}^n \to \mathbb{R}^m
+\] \[
+\quad\underline{x} \to A\underline{x}
+\] dove \(\underline{x}\) è un \textbf{vettore colonna}. Quindi
+l'immagine di un vettore \(v\) tramite \(L_A\) è il prodotto righe per
+colonne di \(A\) con \(v\).
+
+\(L_A\) può essere definita dando le immagini di una base del dominio
+(base canonica, o facendo poi un cambio di base), e in particolare le
+colonne di \(A\) saranno \(C_1 = L(e_1), \dots, C_n = L(e_n)\) ; oppure
+può essere definita dando la legge
+\(L(x_1, x_2, \dots, x_n) = (y_1, y_2, \dots, y_m)\) .
+
+\textbf{Calcolo del nucleo}:
+
+Il nucleo di \(L_A\) è
+\(\text{Ker}(L_A) = \{v \in \mathbb{R}^n \mid L_A(v) = \underline{0}\} = \{v \in \mathbb{R}^n \mid A\cdot v = \underline{0}\}\)
+. Perciò per calcolarlo ci basta risolvere il sistema associato
+\(Av = \underline{0}\) . Se il sistema ammette una sola soluzione essa è
+quella nulla e perciò \(\text{Ker}(L_A) = \{\underline{0}\}\) ,
+altrimenti avremo infinite soluzioni (e quindi infiniti vettori nel
+nucleo) dipendenti da \(n - r\) parametri, dove \(r\) è il rango righe
+della matrice \(A\). Il kernel avrà quindi dimensione \(n - r\) .
+
+\hypertarget{domanda-13}{%
+\subsection{Domanda 13}\label{domanda-13}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{12}
+\tightlist
+\item
+  Data una matrice \(A\in M_{m,n}(\mathbb{R}^n)\), definire
+  l'applicazione lineare \(L_A\) ad essa associata e dare la motivazione
+  teorica del calcolo della sua immagine.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} sia \(A \in M_{m\times n}(\mathbb{R})\) ,
+definiamo l'applicazione lineare \(L_A\): \[
+L_A : \mathbb{R}^n \to \mathbb{R}^m
+\] \[
+\quad\underline{x} \to A\underline{x}
+\] dove \(\underline{x}\) è un \textbf{vettore colonna}. Quindi
+l'immagine di un vettore \(v\) tramite \(L_A\) è il prodotto righe per
+colonne di \(A\) con \(v\).
+
+\(L_A\) può essere definita dando le immagini di una base del dominio
+(base canonica, o facendo poi un cambio di base), e in particolare le
+colonne di \(A\) saranno \(C_1 = L(e_1), \dots, C_n = L(e_n)\) ; oppure
+può essere definita dando la legge
+\(L(x_1, x_2, \dots x_n) = (y_1, y_2, \dots y_m)\) .
+
+\textbf{Calcolo dell'immagine}:
+
+Sappiamo che \(\text{Im}(L) = \langle L(e_1), \dots ,L(e_n) \rangle\)
+perciò le colonne di \(A\) generano l'immagine. Per trovarne una base
+possiamo mettere le colonne di \(A\) in riga e applicare Gauss in modo
+diretto per trovare quali di esse sono linearmente indipendenti. Questo
+equivale ad applicare Gauss su \(A^T\). L'immagine di \(A\) ha quindi
+dimensione uguale al rango colonne di \(A\) .
+
+\hypertarget{domanda-14}{%
+\subsection{Domanda 14}\label{domanda-14}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{13}
+\tightlist
+\item
+  Dimostrare il teorema: siano \(V,W\) spazi vettoriali, sia
+  \(B=\{v_1,\ldots,v_n\}\) una base di \(V\) e siano
+  \(w_1,\ldots,w_n\in W\). Allora esiste una ed una sola applicazione
+  lineare \(F:V\to W\) tale che \(F(v_1)=w_1,\ldots,F(v_n)=w_n\).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Dimostrazione:}
+
+Definiamo innanzitutto \(F\), cioè assegniamo una legge che ad ogni
+\(v \in V\) associa un elemento di \(W\).
+
+Sia \(v \in V\) scriviamo \(v = \lambda_1 v_1 + \dots + \lambda_n v_n\)
+. Poniamo \[
+F(v) = \lambda_1 w_1 + \dots + \lambda_n w_n
+\]
+
+Ora mostriamo che \(F\) è lineare.
+
+Siano \(u, v \in V\) mostriamo che \(F(u + v) = F(u) + F(v)\) : \[
+u = a_1 v_1 + \dots + a_n v_n \qquad v = b_1 v_1 + \dots + b_n v_n
+\] \[
+F(u) = a_1 w_1 + \dots + a_n w_n \qquad F(v) = b_1 w_1 + \dots + b_n w_n
+\] Allora calcoliamo \(F(u + v)\): \[
+\begin{aligned}
+F(u + v) &= F(a_1 v_1 + \dots + a_n v_n + b_1 v_1 + \dots + b_n v_n) \\
+&= F((a_1 + b_1) v_1 + \dots + (a_n + b_n) v_n) \\
+&= (a_1 + b_1) w_1 + \dots + (a_n + b_n) w_n \\
+&= a_1 w_1 + \dots + a_n w_n + b_1 w_1 + \dots + b_n w_n \\
+&= F(u) + F(v)
+\end{aligned}
+\]
+
+Sia \(u\in V\) mostriamo che \(F(\lambda u) = \lambda F(u)\) \[
+\begin{aligned}
+F(\lambda u) &= F(\lambda a_1 v_1 + \lambda a_2 v_2 + \dots + \lambda a_n v_n ) \\
+&= \lambda a_1 w_1 + \lambda a_2 w_2 + \dots + \lambda a_n w_n \\
+&= \lambda (a_1 w_1 + \dots + a_n w_n) \\
+&= \lambda F(u)
+\end{aligned}
+\] Abbiamo quindi dimostrato che \(F\) è lineare.
+
+Dobbiamo ora mostrare che \(F\) è unica:
+
+Sia \(G: V \to W\) lineare, tale che \(G(v_i) = w_i\) . Mostriamo che
+\(F = G\):
+
+Sia \(v \in V\) scriviamo \(v = \lambda_1 v_1 + \dots + \lambda_n v_n\)
+. Calcoliamo \(G(v)\): \[
+\begin{aligned}
+G(v) &= G(\lambda_1 v_1 + \dots + \lambda_n v_n) \\
+&= \lambda_1 G(v_1) + \dots + \lambda_n G(v_n)\\
+&= \lambda_1 w_1 + \dots + \lambda_n w_n \\
+&= F(v)
+\end{aligned}
+\] Quindi abbiamo dimostrato che \(F\) è unica.
+
+\hypertarget{domanda-15}{%
+\subsection{Domanda 15}\label{domanda-15}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{14}
+\tightlist
+\item
+  Enunciare e dimostrare il Teorema della Dimensione.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Teorema:} Sia \(F: V \to W\) lineare. Allora:\\
+\[
+\dim(V) = \dim(\text{Ker}(F)) + \dim(\text{Im}(F))
+\]
+
+\textbf{Dimostrazione:}
+
+Sia \(\dim(V) = n, \; \dim(\text{Ker}(F)) = r\). Mostriamo che
+\(\dim(\text{Im}(F)) = n - r\) .
+
+Sia \(\{v_1, \dots, v_r \}\) base di \(\text{Ker}(F)\).
+\(v_1, \dots, v_r\) sono linearmente indipendenti quindi posso
+completare \(\{v_1, \dots, v_r \}\) a una base di \(V\) (aggiungendo
+\(n-r\) vettori indipendenti): \[
+\beta = \{v_1, .., v_r, z_{r+1},..., z_{n}\}
+\] Mostriamo che \(\{F(z_{r+1}), ..., F(z_n)\}\) è una base di
+\(\text{Im}(F)\) , mostrando così che che \(\dim(\text{Im}(F)) = n - r\)
+.
+
+Sappiamo che: \[
+\text{Im}(F) = \langle F(v_1), \dots , F(v_r), F(z_{r+1}), ..., F(z_n) \rangle = \langle F(z_{r+1}), ..., F(z_n)\rangle
+\]poiché \(F(v_1) = F(v_2) = \dots = F(v_r) = \underline{0}\) in quanto
+fanno pare del kernel.
+
+Mostriamo che \(F(z_{r+1}), ..., F(z_n)\) sono linearmente indipendenti.
+
+Sia \[
+\lambda_{r+1} F(z_{r+1})+ ...+ \lambda_{n}F(z_n) = \underline{0}
+\] dobbiamo mostrare che
+\(\lambda_{z+1} = ... = \lambda_n = \underline{0}\) (definizione di
+lineare indipendenza).
+
+Essendo \(F\) lineare,
+\(F(\lambda_{r+1}z_{r+1} + ...+ \lambda_{n} z_n) = \underline{0}\) .
+Perciò dato \[
+z = \lambda_{r+1}z_{r+1} + ...+ \lambda_{n} z_n
+\] vale che: \[
+F(z) = \underline{0} \quad\Longrightarrow \quad z \in \text{Ker}(F) = \langle v_1, \dots,  v_r \rangle
+\] Perciò \[
+z = \lambda_1 v_1 + ... + \lambda_r v_r
+\] Perciò essendo che ovviamente \(z - z = \underline{0}\): \[
+\lambda_1 v_1 + ... + \lambda_r v_r - \lambda_{r+1}z_{r+1} - ...- \lambda_{n} z_n = \underline{0}
+\]
+
+Essendo \(\beta\) linearmente indipendente deve valere che \[
+\lambda_1 = \lambda_2 = ... = -\lambda_{z+1} = ... = - \lambda_n = \underline{0}
+\]
+
+In particolare quindi \[
+\lambda_{z+1} = ... = \lambda_n = \underline{0}
+\] Quindi \(F(z_{r+1}), ..., F(z_n)\) sono linearmente indipendenti.
+Quindi sono base di \(\text{Im}(F)\). Quindi vale che
+\(\dim(\text{Im}(F)) = n - r\) .
+
+\hypertarget{domanda-16}{%
+\subsection{Domanda 16}\label{domanda-16}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{15}
+\tightlist
+\item
+  Definire il rango righe e il rango colonne di una matrice e dimostrare
+  che sono uguali.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(A \in M_{m \times n}(\mathbb{R})\).
+
+Il \textbf{rango righe} di \(A\) è \(rr(A) =\dim\) del sottospazio
+generato dalle righe di \(A\).
+
+Il \textbf{rango colonne} di \(A\) è \(rc(A) = \dim\) del sottospazio
+generato dalle colonne di \(A\).
+
+\textbf{Dimostrazione:}
+
+Dimostriamo che \(rr(A) = rc(A)\) . Consideriamo l'applicazione lineare
+\(L_A : \mathbb{R}^n \to \mathbb{R}^m\) tale che
+\(L_A (\underline{x}) = A\underline{x}\) .
+
+Per il teorema della dimensione: \[
+n = \dim(\text{Ker} (L_A)) + \dim(\text{Im} (L_A))
+\] \(\text{Ker}(L_A)\) è l'insieme delle soluzioni del sistema
+\(A\underline{x} = \underline{0}\) e ha dimensione \(n - rr(A)\) perché
+dopo aver ridotto \(A\) a scala, abbiamo \(rr(A)\) pivot e le soluzioni
+dipendono \(n - rr(A)\) parametri.
+
+\(\text{Im}(L_A) = \langle L_A(v_1), \dots , L_A(v_n) \rangle\) =
+sottospazio generato dalle colonne di \(A\), e ha \(\dim = rc(A)\)\\
+Otteniamo: \[
+n = (n -rr(A)) + rc(A) \quad \Rightarrow \quad rr(A) = rc(A)
+\]
+
+\hypertarget{domanda-17}{%
+\subsection{Domanda 17}\label{domanda-17}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{16}
+\tightlist
+\item
+  Definizione di isomorfismo tra spazi vettoriali e di spazi vettoriali
+  isomorfi. Enunciare e possibilmente dimostrare il teorema che
+  caratterizza gli spazi vettoriali isomorfi.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(F : V \to W\) una applicazione lineare.
+\(F\) si i dice \textbf{isomorfismo} se è iniettiva e suriettiva (ovvero
+biettiva).
+
+\textbf{Definizione:} Due spazi vettoriali \(V, W\) si dicono
+\textbf{isomorfi} se esiste un isomorfismo \(F: V \to W\)
+
+\textbf{Teorema:} Due spazi vettoriali \(V, W\) sono isomorfi \(\iff\)
+hanno la stessa dimensione.
+
+\textbf{Dimostrazione:}
+
+\(\Rightarrow\): Per ipotesi \(V\) è isomorfo a \(W\) e sia
+\(F: V \to W\) isomorfismo. Per il teorema della dimensione:
+
+\begin{itemize}
+\tightlist
+\item
+  \(F\) iniettiva \(\Rightarrow \text{Ker}(F)\) ha dimensione 0
+\item
+  \(F\) suriettiva \(\Rightarrow \text{Im}(F) = W\)
+\end{itemize}
+
+Quindi \(\dim(V) = 0 + \dim(W)\). Quindi \(V\) e \(W\) hanno la stessa
+dimensione.
+
+\(\Leftarrow\): Per ipotesi \(\dim(V) = \dim(W) = n\) . Sia
+\(\beta = \{v_1 ... v_n\}\) base di \(V\) e sia
+\(\tilde{\beta} = \{w_1 ... w_n\}\) base di \(W\).
+
+Per il teorema di esistenza delle applicazioni lineari esiste un'
+(unica) applicazione lineare \(F: V \to W\) tale che
+\(F(v_1) = w_1, ..., F(v_n) = w_n\).
+
+Mostriamo che \(F\) è un isomorfismo:
+
+Sappiamo che
+\(\text{Im}(F) = \langle F(v_1) .... F(v_n) \rangle = \langle w_1, ..., w_n \rangle = W\),
+quindi \(F\) è suriettiva.\\
+Per il teorema della dimensione
+\(\dim(V) = \dim(\text{Ker}(F)) + \dim(\text{Im}(F))\), ma allora,
+poiché \(\dim(V) = \dim(\text{Im}(F)) = n\), vale che
+\(\dim(\text{Ker}(F)) = 0\), perciò \(F\) è iniettiva.
+
+\hypertarget{domanda-18}{%
+\subsection{Domanda 18}\label{domanda-18}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{17}
+\tightlist
+\item
+  Controimmagine (o preimmagine) di un vettore tramite una applicazione
+  lineare: definizione e caratterizzazione.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(F: A \to B\) una funzione. Sia \(b \in B\).
+Allora: \[
+F^{-1}(b) = \{a \in A \mid F(a) = b\} \subseteq A
+\] è la \textbf{controimmagine} o \textbf{preimmagine} o
+\textbf{antiimmagine} di un \(b\) tramite la funzione \(F\).
+
+\textbf{Teorema di struttura della controimmagine:} Sia \(F : V \to W\)
+una applicazione lineare e sia \(w \in W\). Allora innanzitutto: \[
+w \in \text{Im}(F) \iff F^{-1}(w) \not = \emptyset
+\] Se \(w \in \text{Im}(F)\), fissiamo un qualsiasi \(v \in F^{-1}(w)\).
+Allora: \[
+F^{-1}(w) = \{v + z \mid z \in \text{Ker}(F) \}
+\] Le controimmagini sono quindi dei traslati di \(\text{Ker}(F)\).
+
+\textbf{Dimostrazione:}
+
+Per definizione: \[
+F^{-1}(w) = \{u \in V \mid F(u) = w\}
+\] Sia \(v \in F^{-1}(w)\). Ora, per mostrare che \[
+F^{-1}(w) = \{v + z \mid z \in \text{Ker}(F) \}
+\] mostriamo la doppia inclusione tra insiemi. Iniziamo mostrando che \[
+\{v + z \mid z \in \text{Ker}(F) \} \subseteq F^{-1}(w) 
+\] Sia \(u = v + z\) con \(z \in \text{Ker}(F)\). Allora: \[
+F(u) = F(v + z) = F(v) + F(z) = w + 0 = w
+\] Quindi \(u \in F^{-1}(w)\) .
+
+Dobbiamo ora mostrare che \[
+F^{-1}(w) \subseteq \{v + z \mid z \in \text{Ker}(F) \}
+\] Perciò sia \(u \in F^{-1}(w)\), dobbiamo mostrare che possiamo
+scrivere \(u\) come \(u = v + z\), con \(z \in \text{Ker}(F)\).
+Mostriamo che vale \(z = u - v\). Notiamo che \[
+F(z) = F(u - v) = F(u) - F(v) = w - w = \underline{0}
+\] che è corretto in quanto vogliamo che \(z \in \text{Ker}(F)\). Perciò
+\(z = u - v\). Perciò possiamo ridurci a dimostrare \(u = v + (u - v)\),
+che ovviamente si semplifica in \(u = u\). Ovvio.
+
+\hypertarget{domanda-19}{%
+\subsection{Domanda 19}\label{domanda-19}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{18}
+\tightlist
+\item
+  Enunciare il teorema di Rouché-Capelli e dimostrarne la prima parte.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Teorema:} Sia \(A\underline{x} = \underline{b}\) un sistema
+lineare di \(m\) equazioni in \(n\) incognite. Esso ha soluzione
+\(\iff r(A) = r(A \mid b)\).
+
+Inoltre se \(r(A) = r(A \mid b) = r\), il sistema ha:
+
+\begin{itemize}
+\tightlist
+\item
+  1 sola soluzione se \(r=n\)
+\item
+  Infinite soluzioni che dipendono da \(n-r\) parametri se \(r < n\)
+\end{itemize}
+
+\textbf{Dimostrazione prima parte:}
+
+Sia \(L_A : \mathbb{R}^n \to \mathbb{R}^m\) l'applicazione lineare
+associata ad \(A\), cioè \(L_A(\underline{x}) = A \underline{x}\) .
+
+Consideriamo questa catena di coimplicazioni (\(\iff\)): \[
+\begin{aligned}
+\text{Il sistema } A\underline{x} = \underline{b} \text{ ha soluzione }\iff& \\
+L_A^{-1}(\underline{b}) \not = \emptyset \iff&\\
+\underline{b} \in \text{Im}(L_A) \iff&\\
+\underline{b} \in \langle L_A (e_1), \dots, L_A(e_n) \rangle \iff& \\
+\underline{b} \in \langle \text{colonne di } A \rangle
+\end{aligned}
+\] ma sappiamo che se
+\(\underline{b} \in \langle \text{colonne di } A \rangle\) allora: \[
+\langle \text{colonne di } A \rangle = \langle \underline{b}, \text{colonne di } A \rangle
+\] perciò: \[
+\begin{aligned}
+\iff& \dim(\langle \underline{b},  \text{colonne di } A \rangle)  =\dim(\langle \text{colonne di } A \rangle) \\
+\iff& r(A \mid \underline{b}) = r(A)
+\end{aligned}
+\]
+
+\hypertarget{domanda-20}{%
+\subsection{Domanda 20}\label{domanda-20}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{19}
+\tightlist
+\item
+  Determinante di una matrice: definizione e proprietà.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Il \textbf{determinante} è una funzione che
+associa ad ogni matrice quadrata \(A\) di ordine \(n\) un numero reale,
+indicato con \[
+\det(A)
+\] tale che valgano le seguenti proprietà:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Se la riga \(j\)-esima di \(A\) è somma di due vettori \(u\) e \(v\),
+  allora il determinante di \(A\) è la somma dei determinanti delle
+  matrici ottenute sostituendo alla riga \(j\)-esima rispettivamente
+  \(u\) e \(v\).
+\item
+  Se la riga \(j\)-esima di \(A\) è del tipo \(\lambda u\), con
+  \(\lambda \in \mathbb{R}\), allora \[
+  \det(A) = \lambda \det(B)
+  \]
+
+  dove \(B\) è la matrice ottenuta sostituendo la \(j\)-esima riga con
+  \(u\).
+\item
+  Se due righe di \(A\) sono uguali, allora \[
+  \det(A)=0
+  \]
+\item
+  Vale che \[
+  \det(I)=1
+  \]
+\end{enumerate}
+
+\textbf{Proprietà del determinante:}
+
+Siano \(A\) e \(B\) matrici quadrate di ordine \(n\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Se \(B\) si ottiene da \(A\) scambiando due righe, allora \[
+  \det(B) = -\det(A)
+  \]
+\item
+  Se \(B\) si ottiene sommando ad una riga di \(A\) una combinazione
+  lineare delle altre righe, allora \[
+  \det(B)=\det(A)
+  \]
+\item
+  Se \(A\) è una matrice triangolare superiore oppure triangolare
+  inferiore, cioè i coefficienti al di sotto (rispettivamente al di
+  sopra) della diagonale principale sono tutti uguali a zero, allora il
+  suo determinante è il prodotto degli elementi della diagonale
+  principale: \[
+  \det(A)=a_{11}a_{22}\cdots a_{nn}
+  \]
+\end{enumerate}
+
+\hypertarget{domanda-21}{%
+\subsection{Domanda 21}\label{domanda-21}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{20}
+\tightlist
+\item
+  Definizione di matrice quadrata invertibile. Se una matrice quadrata è
+  invertibile allora il suo determinante è diverso da zero.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Una matrice \(A \in M_{n\times n}(\mathbb{R})\) si
+dice \textbf{invertibile} se esiste una matrice
+\(B \in M_{n\times n}(\mathbb{R})\), tale che: \[
+AB = BA = I
+\]La matrice \(B\) si dice l'\textbf{inversa} di \(A\) e si indica con
+\(A^{-1}\).
+
+\textbf{Dimostrazione:}
+
+Mostriamo che una matrice \(A \in M_{n}(\mathbb{R})\) è invertibile
+\(\Longrightarrow \det(A) \not = 0\) :
+
+Sia \(A\) invertibile e sia \(B\) l'inversa di \(A\). Quindi \(AB = I\)
+. Per Binet vale che: \[
+\det(AB) = \det(A)\det(B) = \det(I) = 1
+\] quindi \[
+\det(A)\det(B)=1 \Rightarrow \det(A) \not = 0
+\]
+
+\hypertarget{domanda-22}{%
+\subsection{Domanda 22}\label{domanda-22}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{21}
+\tightlist
+\item
+  Definizione di matrice quadrata invertibile. Se \(A,B\) sono matrici
+  quadrate tali che \(AB=I\), allora \(B\) è l'inversa di \(A\).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Una matrice \(A \in M_{n\times n}(\mathbb{R})\) si
+dice \textbf{invertibile} se esiste una matrice
+\(B \in M_{n\times n}(\mathbb{R})\), tale che: \[
+AB = BA = I
+\]La matrice \(B\) si dice l'\textbf{inversa} di \(A\) e si indica con
+\(A^{-1}\).
+
+\textbf{Dimostrazione:}
+
+Mostriamo che se \(A,B\) sono matrici quadrate tali che \(AB=I\), allora
+\(B\) è l'inversa di \(A\).
+
+Innanzitutto sappiamo che: \[
+AB = I \;\Longrightarrow\; \det(AB) = \det(I) = 1
+\] Inoltre per Binet: \[
+\;\Longrightarrow\; \det(A)\cdot\det(B) = 1 \;\Longrightarrow\; \det(A) \not = 0
+\] quindi \(A\) è invertibile, quindi esiste \(A^{-1}\).
+
+Moltiplichiamo a sinistra entrambi i membri di \(AB = I\) per
+\(A^{-1}\): \[
+A^{-1}AB = A^{-1}I \;\Longrightarrow\; (A^{-1}A)B = A^{-1} \;\Longrightarrow\; IB = A^{-1} \;\Longrightarrow\; B = A^{-1}
+\]
+
+\hypertarget{domanda-23}{%
+\subsection{Domanda 23}\label{domanda-23}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{22}
+\tightlist
+\item
+  Enunciare il seguente teorema e dimostrare qualche implicazione
+  (''teoremone''). Sia \(F=L_A\) un endomorfismo di \(\mathbb{R}^n\):
+  sono equivalenti: \((a)\) \(F\) è iniettiva, \((b)\) \ldots{}
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Teorema:} Sia \(F : \mathbb{R}^n \to \mathbb{R}^n\) una
+applicazione lineare e sia \(A\) la matrice associata a \(F\) rispetto
+alla base canonica. Le seguenti affermazioni sono equivalenti:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(F\) è un isomorfismo
+\item
+  \(F\) è iniettiva
+\item
+  \(F\) è suriettiva
+\item
+  \(\dim(\text{Im}(F))=n\)
+\item
+  \(r(A) = n\)
+\item
+  Le colonne di \(A\) sono linearmente indipendenti
+\item
+  Le righe di \(A\) sono linearmente indipendenti
+\item
+  Il sistema \(A\underline{x} = \underline{0}\) ha un'unica soluzione
+\item
+  \(\forall\, b \in \mathbb{R}^n\) il sistema
+  \(A\underline{x} = \underline{b}\) ha un'unica soluzione
+\item
+  \(A\) è invertibile
+\item
+  \(\det(A) \not = 0\)
+\end{enumerate}
+
+\textbf{Dimostrazione:}
+
+\begin{itemize}
+\tightlist
+\item
+  1 \(\Rightarrow\) 2 per definizione di isomorfismo
+\item
+  2 \(\Rightarrow\) 3 per il teorema della dimensione, poiché se \(F\) è
+  iniettiva, \(\dim(\text{Ker}(F)) = 0\) quindi
+  \(\dim(\text{Im}(F)) = n\), quindi \(F\) è suriettiva
+\item
+  3 \(\iff\) 4, infatti \(F\) è suriettiva \(\iff \dim(\text{Im}(F))=n\)
+\item
+  4 \(\Rightarrow\) 1 poiché \(4 \Rightarrow 3\) e inoltre per il
+  teorema della dimensione
+  \(\dim(\text{Ker}(F)) = n - \dim(\text{Im}(F)) = n - n =0\), quindi
+  \(F\) è iniettiva, quindi \(F\) è isomorfismo
+\item
+  4 \(\Rightarrow\) 5,
+  \(\dim(\text{Im}(F))=n \Rightarrow \dim(\langle F(e_1), ..., F(e_n) \rangle) = n\)
+  ed è uguale alla dimensione del sottospazio generato dalle colonne,
+  che è proprio \(r(A)\)
+\item
+  5 \(\Rightarrow\) 6:
+  \(r(A) = n \Rightarrow \dim(\langle \text{colonne di A} \rangle) = n \Rightarrow \langle \text{colonne di A} \rangle = \mathbb{R}^n \Rightarrow\)
+  per GEL sono linearmente indipendenti
+\item
+  6 \(\Rightarrow\) 4: le colonne ci \(A\) sono linearmente indipendenti
+  , quindi \(\dim(\langle \text{colonne di A} \rangle) = n\). Ma
+  \(\text{Im}(F)\) è proprio il sottospazio generato dalle colonne,
+  quindi \(\dim(\text{Im}(F))=n\)
+\item
+  5 \(\iff\) 7 ovvio per GEL
+\item
+  8 \(\iff\) 2, perché \(F\) è iniettiva
+  \(\iff \text{Ker}(F) = \{\underline{0}\} \iff \{\text{soluzione di } A\underline{x} = \underline{0}\} = \{\underline{0}\}\)
+\item
+  9 \(\iff\) 5, per il teorema di Rouché-Capelli
+\item
+  10 \(\iff\) 11 per la proposizione sul calcolo dell'inversa,
+  dimostrata precedentemente.
+\item
+  1 \(\iff\) 10, \(F\) è biunivoca \(\iff\) \(F\) ha un'inversa \(\iff\)
+  \(A\) ammette un'inversa
+\end{itemize}
+
+\hypertarget{domanda-24}{%
+\subsection{Domanda 24}\label{domanda-24}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{23}
+\tightlist
+\item
+  Matrice associata ad una applicazione lineare rispetto a due basi
+  fissate \(\beta\) del dominio e \(\widetilde{\beta}\) del codominio:
+  come si costruisce e perché permette di determinare l'immagine di un
+  qualsiasi vettore. La matrice
+  \(I_{\beta \mathcal{C}} = M_{\beta}^{\mathcal{C}}(\text{id})\)
+  associata all'identità di \(\mathbb{R}^n\) .
+\end{enumerate}
+\end{observationbox}
+
+Siano
+
+\begin{itemize}
+\tightlist
+\item
+  \(F : V \to W\) applicazione lineare,
+\item
+  \(\beta = \{v_1, \dots, v_n\}\) base ordinata di \(V\)
+\item
+  \(\widetilde{\beta} = \{w_1, \dots, w_m\}\) base ordinata di \(W\)
+\end{itemize}
+
+Allora esiste una matrice \[
+A = A_{\beta \widetilde{\beta}} = M^{\widetilde{\beta}}_{\beta}(F) \quad \in M_{m\times n}(\mathbb{R})
+\] tale che se conosco \(A\) conosco \(F\), ovvero: \[
+(F(v))_{\widetilde{\beta}} = A\cdot(v)_{\beta}
+\] Inoltre nell' \(i\)-esima colonna di \(A\) ci sono le coordinate di
+\(F(v_i)\) rispetto alla base \(\widetilde{\beta}\) : \[
+A=M^{\widetilde{\beta}}_{\beta}(F)  
+=  
+\left(  
+\begin{array}{cccc}  
+\big| & \big| & & \big| \\  
+(F(v_1))_{\widetilde{\beta}}  
+&  
+(F(v_2))_{\widetilde{\beta}}  
+&  
+\cdots  
+&  
+(F(v_n))_{\widetilde{\beta}}  
+\\  
+\big| & \big| & & \big|  
+\end{array}  
+\right)
+\] Perciò, dato un vettore \(v\), se conosco \(A\) posso calcolare
+\(F(v)\) : \[
+v \to \text{coordinate } (v)_{\beta} \to A \cdot (v)_\beta = (F(v))_{\widetilde{\beta}} \to \text{dalle coordinate rispetto a } \widetilde{\beta} \text{ ottengo } F(v)
+\] In pratica le coordinate di \(F(v)\) rispetto a \(\widetilde{\beta}\)
+sono il prodotto righe per colonne di \(A\) per le coordinate di \(v\)
+rispetto alla base di \(V\).
+
+\bigskip
+
+La matrice
+\(I_{\beta \mathcal{C}} = M_{\beta}^{\mathcal{C}}(\text{id})\) associata
+all'identità di \(\mathbb{R}^n\) è la matrice che ha per colonne i
+vettori \(v_1, \dots , v_n\) della base ordinata \(\beta\) .
+
+\hypertarget{domanda-25}{%
+\subsection{Domanda 25}\label{domanda-25}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{24}
+\tightlist
+\item
+  Matrice associata ad una applicazione lineare rispetto a due basi
+  fissate \(\beta\) del dominio e \(\widetilde{\beta}\) del codominio:
+  come si costruisce e perché permette di determinare l'immagine di un
+  qualsiasi vettore. La matrice
+  \(I_{\beta \beta} = M_{\beta}^{\beta}(\text{id})\) associata
+  all'identità di \(\mathbb{R}^n\) .
+\end{enumerate}
+\end{observationbox}
+
+Prima parte come domanda 24.
+
+La matrice \(I_{\beta \beta} = M_{\beta}^{\beta}(\text{id})\) associata
+all'identità di \(\mathbb{R}^n\) è la matrice identità (\(I\)), in
+quanto per un generico vettore della base \(v_i\), nella colonna i-esima
+di \(I_{\beta \beta}\) ci sono le coordinate di \(v_i\) rispetto a
+\(\beta\), ma essendo \(v_1 \in \beta\) le coordinate saranno
+\((0, 0, \dots , 1, \dots, 0)\), ovvero tutti zero, tranne 1 nella
+posizione \(i\)-esima.
+
+\hypertarget{domanda-26}{%
+\subsection{Domanda 26}\label{domanda-26}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{25}
+\tightlist
+\item
+  Dimostrare che \(I_{\mathcal{C} \beta} = I_{\beta \mathcal{C}}^{-1}\)
+  , cioè che \(M^B_C(\text{id})=(M^C_B(\text{id}))^{-1}\).
+\end{enumerate}
+\end{observationbox}
+
+Consideriamo la seguenti applicazioni lineari di identità:
+
+\begin{itemize}
+\tightlist
+\item
+  \(\text{id}' : \mathbb{R}^n (\text{base } \mathcal{C}) \to \mathbb{R}^n (\text{base } \beta)\)
+  . La matrice associata è \(I_{\mathcal{C} \beta}\) .
+\item
+  \(\text{id}'' : \mathbb{R}^n (\text{base } \beta) \to \mathbb{R}^n (\text{base } \mathcal{C})\)
+  . La matrice associata è \(I_{\beta \mathcal{C}}\) .
+\end{itemize}
+
+E consideriamo la funzione composta \(\text{id}' \circ \text{id}''\) .
+Essendo \(\text{id}' ,\text{id}''\) lineari, la matrice associata alla
+composta \(\text{id}' \circ \text{id}''\) è
+\(I_{\beta \mathcal{C}} \cdot I_{\mathcal{C} \beta}\) (la matrice
+dell'applicazione lineare che agisce prima si trova più a destra). Lo
+schema relativo è il seguente:
+
+\begin{center}
+\begin{tikzcd}[column sep=huge,row sep=tiny]
+\mathbb{R}^n
+\arrow[r, "\mathrm{id}'", "I_{\mathcal{C} \beta }"']
+\arrow[rr, bend right=35, dashed]
+&
+\mathbb{R}^n
+\arrow[r, "\mathrm{id}''", "I_{\beta \mathcal{C} }"']
+&
+\mathbb{R}^n
+\\
+{\scriptstyle \mathcal{C}}
+&
+{\scriptstyle \beta}
+&
+{\scriptstyle \mathcal{C}}
+\end{tikzcd}
+\end{center}
+
+Essendo \(\text{id}' \circ \text{id}'' = \text{id}\) , la matrice
+associata alla composta è
+\(I_{\beta \mathcal{C}} \cdot I_{\mathcal{C} \beta} = I_{\mathcal{C} \mathcal{C}} = I\)
+. Quindi: \[
+I_{\beta \mathcal{C}} \cdot I_{\mathcal{C} \beta} = I \;\Longrightarrow\; I_{\mathcal{C} \beta} = I_{\beta \mathcal{C}}^{-1}
+\]
+
+\hypertarget{domanda-27}{%
+\subsection{Domanda 27}\label{domanda-27}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{26}
+\tightlist
+\item
+  Definizione di endomorfismo diagonalizzabile e di matrice
+  diagonalizzabile. Dimostrare che un endomorfismo è diagonalizzabile se
+  e solo se la matrice associata è diagonalizzabile.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Un endomorfismo \(F: V \to V\) si dice
+\textbf{diagonalizzabile} se esiste una base \(\beta\) di \(V\) tale che
+\(M^{{\beta}}_{\beta}(F)\) sia diagonale.
+
+\textbf{Definizione:} Una matrice quadrata \(A\) si dice
+\textbf{diagonalizzabile} se è simile ad una matrice diagonale, cioè se
+esiste una matrice invertibile \(P\) tale che \(P^{-1}AP = D\) con \(D\)
+diagonale.
+
+\textbf{Dimostrazione:}
+
+\(\Rightarrow\): Sia \(F\) diagonalizzabile, allora esiste \(\beta\)
+base di \(\mathbb{R}^n\) tale che \(M^{{\beta}}_{\beta}(F) = D\) è
+diagonale. La formula del cambio di base dice che
+\(D = I^{{-1}}_{\beta C}AI_{\beta C}\) quindi \(A\) è simile a una
+matrice diagonale, quindi \(A\) è diagonalizzabile.
+
+\(\Leftarrow\): Supponiamo \(A\) diagonalizzabile, cioè esiste \(P\)
+invertibile tale che \(P^{-1}AP = D\) con \(D\) diagonale. Vogliamo
+trovare una base \(\beta\) tale che \(M^{{\beta}}_{\beta}(F)\) sia
+diagonale.
+
+Osserviamo che siccome \(P\) è invertibile, le colonne di \(P\) sono
+linearmente indipendenti, quindi formano una base di \(\mathbb{R}^n\).
+Sia \(\beta = \{v_1, ..., v_n\)\}, dove \(v_1, ..., v_n\) sono le
+colonne di \(P\).
+
+Abbiamo che \(I_{\beta \mathcal{C}} = P\) . Sappiamo per la formula del
+cambio di base che \[
+M^{{\beta}}_{\beta}(F) = I^{{-1}}_{\beta C}AI_{\beta C} = P^{-1}AP = D
+\]
+
+\hypertarget{domanda-28}{%
+\subsection{Domanda 28}\label{domanda-28}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{27}
+\tightlist
+\item
+  Definizione di endomorfismo diagonalizzabile e di autovettore di un
+  endomorfismo. Dimostrare che se \(F\) è un endomorfismo di
+  \(\mathbb{R}^n\) ed esiste una base di \(\mathbb{R}^n\) costituita da
+  autovettori di \(F\) allora \(F\) è diagonalizzabile.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Un endomorfismo \(F: V \to V\) si dice
+\textbf{diagonalizzabile} se esiste una base \(\beta\) di \(V\) tale che
+\(M^{{\beta}}_{\beta}(F)\) sia diagonale.
+
+\textbf{Definizione:} Sia \(F: V \to V\) un endomorfismo. Un vettore
+\(v \in V\) si dice \textbf{autovettore} di \(F\) se: \[
+v \not = \underline{0} \;\;\text{ e }\;\; F(v) = \lambda v \,,\; \lambda \in \mathbb{R}
+\] \(\lambda\) si dice \textbf{autovalore} dell'autovettore \(v\).
+
+\textbf{Dimostrazione:}
+
+Sia \(\beta = \{v_1, ... v_n\}\) una base di \(V\) costituita da
+autovettori. Mostriamo che \(M^{{\beta}}_{\beta}(F)\) è diagonale.
+Essendo \(v_1, ..., v_n\) autovettori, \(F(v_i) = \lambda_i v_i\) .
+Cerchiamo ora \((F(v_i))_{\beta}\), osserviamo che: \[
+F(v_i) = \lambda_i v_i = 0 v_1 + ... + \lambda_i v_i + ... + 0 v_n
+\] e quindi: \[
+(F(v_i))_{\beta} = (0 , ... , \lambda_i , ... , 0)
+\] Perciò: \[
+M^{{\beta}}_{\beta}(F) =
+\begin{pmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \lambda_n
+\end{pmatrix}
+\]
+
+Notiamo che tale matrici è diagonale e che inoltre che sulla diagonale
+ci sono gli autovalori ordinati.
+
+\hypertarget{domanda-29}{%
+\subsection{Domanda 29}\label{domanda-29}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{28}
+\tightlist
+\item
+  Definizione di endomorfismo diagonalizzabile e di autovettore di un
+  endomorfismo. Dimostrare che se un endomorfismo \(F\) di
+  \(\mathbb{R}^n\) è diagonalizzabile allora esiste una base di
+  \(\mathbb{R}^n\) costituita da autovettori di \(F\).
+\end{enumerate}
+\end{observationbox}
+
+Prima parte come domanda 28.
+
+\textbf{Dimostrazione:}
+
+Supponiamo che \(F\) sia diagonalizzabile, allora esiste una base
+\(\beta\) tale che \(M^{{\beta}}_{\beta}(F)\) è diagonale, ovvero
+abbiamo sulla diagonale principale i valori
+\(\lambda_1, ..., \lambda_n\). Mostriamo che \(\beta = \{v_1, ...v_n\}\)
+è costituita da autovettori. Sappiamo che sulla \(i\)-esima colonna di
+\(M^{{\beta}}_{\beta}(F)\) ci sono le coordinate di \(F(v_i)\) rispetto
+a \(\beta\), quindi: \[
+F(v_i) = 0 v_1 + ... + \lambda_i v_i + ... + 0 v_n = \lambda_i v_i
+\] quindi \(v_i\) è autovettore di autovalore \(\lambda_i\) .
+
+\hypertarget{domanda-30}{%
+\subsection{Domanda 30}\label{domanda-30}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{29}
+\tightlist
+\item
+  Il polinomio caratteristico di una matrice: definizione e sue
+  proprietà.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Se \(A \in M_n(\mathbb{R})\), sia \(A - xI\) la
+matrice: \[
+A -
+\begin{pmatrix}
+x & 0 & \cdots & 0\\
+0 & x & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & x
+\end{pmatrix}
+= 
+\begin{pmatrix}
+a_{11}-x & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22}-x & \cdots & a_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{n1} & a_{n2} & \cdots & a_{nn}-x
+\end{pmatrix}
+\] Il \textbf{polinomio caratteristico} di \(A\) è: \[
+P_A(x) = \det(A - xI)
+\]
+
+\bigskip
+
+\textbf{Proprietà del polinomio caratteristico:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Ha grado \(n\) e termine direttivo \((-1)^n x^n\)
+\item
+  Il termine noto è \(\det(A)\)
+\item
+  Il termine di grado 1 è \(-(a_{11} + a_{22} + ... + a_{nn})\)
+\end{enumerate}
+
+\hypertarget{domanda-31}{%
+\subsection{Domanda 31}\label{domanda-31}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{30}
+\tightlist
+\item
+  Relazione di similitudine tra matrici. Matrici simili hanno lo stesso
+  determinante? e lo stesso polinomio caratteristico? Motivare con la
+  dimostrazione (se fatta a lezione).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Siano \(A, B \in M_n(\mathbb{R})\) , \(A\) è
+\textbf{simile} a \(B\) se esiste una matrice invertibile
+\(P \in M_n(\mathbb{R})\), tale che \[
+A = P^{-1}BP
+\]
+
+La relazione di similitudine tra matrici è una \textbf{relazione di
+equivalenza}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Riflessiva: \(A\) è simile ad \(A\), poiché \(A = I^{-1}AI\)
+\item
+  Simmetrica: se \(A\) è simile a \(B\), allora \(A = P^{-1}BP\), allora
+  \(PAP^{-1} = P(P^{-1}BP)P^{-1} = B\), che posso scrivere come
+  \(B = (P^{-1})^{-1}AP^{-1}\)
+\item
+  Transitiva: \(A\) simile a \(B\), B simile a \(C\) \(\Rightarrow\)
+  \(A\) simile a \(C\). (Dimostrazione omessa)
+\end{enumerate}
+
+\textbf{Proposizione:} Matrici simili hanno lo stesso determinante.
+
+\textbf{Dimostrazione:}
+
+Per ipotesi \(A = P^{-1}BP\). Calcoliamo:
+
+\[
+\det(A) = \det(P^{-1}BP)
+\] per Binet: \[
+= \det(P^{-1})\cdot \det(B) \cdot \det(P) = \det(B) \cdot \det(P^{-1}P) = \det(B) \cdot \det(I) = \det(B)
+\]
+
+\bigskip
+
+\textbf{Proposizione:} Matrici simili hanno lo stesso polinomio
+caratteristico
+
+\textbf{Dimostrazione:}
+
+Per ipotesi \(A = P^{-1}BP\). Calcoliamo:
+
+\[ 
+\begin{aligned}
+P_A(x) &=\det(A - xI) = \det(P^{-1}BP - xI) = \\
+&=\det(P^{-1}BP - P^{-1}PxI) = \det(P^{-1}BP - P^{-1}(xI)P) = \\
+&=\det(P^{-1}(B-xI)P) =
+\end{aligned}
+\] ora, per binet: \[
+\begin{aligned}
+&=\det(P^{-1})\det(B-xI) \det(P) = P_B(x)\det(P^{-1})\det(P)\\
+&=P_B(x)\det(P^{-1}P) =P_B(x)\det(I) = \\
+&=P_B(x)
+\end{aligned}
+\]
+
+\hypertarget{domanda-32}{%
+\subsection{Domanda 32}\label{domanda-32}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{31}
+\tightlist
+\item
+  Esempio di due matrici che hanno lo stesso polinomio caratteristico ma
+  non sono simili (spiegando il motivo).
+\end{enumerate}
+\end{observationbox}
+
+Consideriamo le matrici: \[
+A = 
+\begin{pmatrix}
+1 & 0 \\
+0 & 1 \\
+\end{pmatrix}  
+\qquad
+B = 
+\begin{pmatrix}
+1 & 1 \\
+0 & 1 \\
+\end{pmatrix}  
+\] Calcoliamone i polinomi caratteristici: \[
+P_A(x) = \det (A - xI) = \det
+\begin{pmatrix}
+1 -x & 0 \\
+0 & 1 -x\\
+\end{pmatrix}  
+= (1-x)^2
+\] \[
+P_B(x) = \det (B - xI) = \det
+\begin{pmatrix}
+1 -x & 1 \\
+0 & 1 -x\\
+\end{pmatrix}  
+= (1-x)^2
+\] Hanno lo stesso polinomi o caratteristico. Mostriamo ora che non sono
+simili.
+
+Notiamo che \(A\) è diagonalizzabile (in quanto è diagonale). Mostriamo
+che invece \(B\) non lo è. Gli autovalori di \(B\) sono: \[
+\lambda = 1 \qquad m_a(1) = 2
+\] Calcoliamo \(m_g(1)\). Calcoliamo quindi la dimensione
+dell'autospazio \(V_1\): \[
+V_1 = \text{Ker}(B - I) = \text{Ker} \begin{pmatrix}
+0 & 1 \\
+0 & 0 \\
+\end{pmatrix}
+= \{(t, 0) \mid t \in \mathbb{R}\} = \langle(1, 0) \rangle
+\] Quindi \(\text{dim}(V_1) = 1\), quindi \(m_g(1) = 1 \neq m_a(1)\) ,
+quindi \(B\) non è diagonalizzabile.
+
+Ed essendo \(A\) diagonalizzabile e \(B\) no, \(A\) e \(B\) non possono
+essere simili in quando la similitudine è una relazione transitiva:
+\(A\) è simile a una matrice \(D\) diagonale, ma se \(B\) è simile ad
+\(A\), anche \(B\) dovrebbe essere simile a \(D\) (impossibile perché
+\(B\) non è diagonalizzabile).
+
+\hypertarget{domanda-33}{%
+\subsection{Domanda 33}\label{domanda-33}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{32}
+\tightlist
+\item
+  Definizione di autovalore di un endomorfismo, molteplicità algebrica e
+  geometrica. Proprietà equivalenti al fatto che un endomorfismo o una
+  matrice siano diagonalizzabili (solo enunciato).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(F: V \to V\) un endomorfismo. Un vettore
+\(v \in V\) si dice \textbf{autovettore} di \(F\) se: \[
+v \not = \underline{0} \;\;\text{ e }\;\; F(v) = \lambda v \,,\; \lambda \in \mathbb{R}
+\] \(\lambda\) si dice \textbf{autovalore} dell'autovettore \(v\).
+
+\textbf{Definizione:} Sia \(A \in M_n (\mathbb{R})\), diciamo che
+\(\lambda\) è autovalore di \(A\) di \textbf{molteplicità algebrica}
+\(m\) e scriviamo \[
+\text{m}_a(\lambda) = m
+\] se \(P_A(x) = (x- \lambda)^m g(x)\) e \(g(\lambda) \not = 0\), cioè
+se \(m\) è la massimo potenza di \((x - \lambda)\) che divide \(P_A(x)\)
+.
+
+\textbf{Definizione:} Se \(\lambda\) è autovalore di \(A\) allora la
+\textbf{molteplicità geometrica} di \(\lambda\) è \[
+\text{m}_g(\lambda) = \dim(V_\lambda) = \dim(\text{Ker}(A - \lambda I))
+\] Ovvero la dimensione dell'autospazio di \(\lambda\) .
+
+\bigskip
+
+\textbf{Proprietà equivalenti al fatto che un endomorfismo o una matrice
+siano diagonalizzabili:}
+
+Sia \(F : \mathbb{R}^n \to \mathbb{R}^n\) un'applicazione lineare. Le
+seguenti proprietà sono equivalenti affinché \(F\) sia diagonalizzabile:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Esiste una base \(\beta\) di \(\mathbb{R}^n\) tale che
+  \(M^{{\beta}}_{\beta}(F)\) sia diagonale (definizione di endomorfismo
+  diagonalizzabile)
+\item
+  Esiste una base di \(\mathbb{R}^n\) costituita da autovettori di \(F\)
+\item
+  Se \(\lambda_1, .., \lambda_k\) sono gli autovalori distinti di \(F\),
+  con molteplicità geometriche \(n_1, .., n_k\), allora vale che
+  \(n_1 + ... + n_k = n\)
+\item
+  Il polinomio caratteristico di
+  \(A = M^{{\mathcal{C}}}_{\mathcal{C}}(F)\) si fattorizza in fattori
+  lineari e, se \(\lambda_1, .., \lambda_k\) sono gli autovalori
+  distinti di \(F\), si ha che
+  \(\text{m}_a(\lambda_i) = \text{m}_g(\lambda_i)\) per ogni \(i\).
+\end{enumerate}
+
+\hypertarget{domanda-34}{%
+\subsection{Domanda 34}\label{domanda-34}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{33}
+\tightlist
+\item
+  Definizione di autovalore di un endomorfismo. Se un endomorfismo ha 0
+  come autovalore, cosa possiamo dedurre e perché?
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(F: V \to V\) un endomorfismo.
+\(\lambda \in \mathbb{R}\) è \textbf{autovalore} di \(F\) se esiste
+\(v \in V, \;v \not = \underline{0}\) tale che \(F(v) = \lambda v\)
+
+\bigskip
+
+\textbf{Se un endomorfismo ha 0 come autovalore, cosa possiamo dedurre e
+perché?}
+
+Innanzitutto ricordiamo che il vettore nullo non può essere autovettore,
+mentre 0 può essere autovalore. Nel caso in cui 0 sia autovalore, vuol
+dire che per tutti i vettori \(v\) dell'autospazio \(V_0\) , vale che
+\(F(v) = 0 \cdot v = \underline{0}\) e perciò \(V_0\) coincide con
+\(\text{Ker}(F)\) (infatti inoltre
+\(V_0 = \text{Ker}(A - 0I )= \text{Ker}(A)=\text{Ker}(F)\)) . Ma allora
+vuol dire che \(\text{Ker}(F) \neq \{\underline{0}\}\), perciò \(F\) non
+è iniettiva e perciò per il teoremone \(A\) non è invertibile,
+\(\text{det}(A) = 0\) ecc\ldots{}
+
+\hypertarget{domanda-35}{%
+\subsection{Domanda 35}\label{domanda-35}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{34}
+\tightlist
+\item
+  Definizione di prodotto scalare euclideo in \(\mathbb{R}^n\) e sue
+  proprietà
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} In \(\mathbb{R}^n\) il \textbf{prodotto scalare
+euclideo} è una funzione: \[
+\begin{aligned}
+\langle \; , \; \rangle: \quad &\mathbb{R}^n \times \mathbb{R}^n &\to& \quad \mathbb{R} \\
+&(\underline{x}, \underline{y}) &\to& \quad\langle \underline{x} , \underline{y} \rangle
+\end{aligned}
+\] tale che, se \(\underline{x} = (x_1, \dots, x_n)\) e
+\(\underline{y} = (y_1, \dots, y_n)\): \[
+\langle \underline{x} , \underline{y} \rangle = x_1y_1 + x_2y_2 + \dots + x_ny_n
+\]
+
+\textbf{Proprietà del prodotto scalare:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(\langle x, y \rangle = \langle y, x \rangle\)
+\item
+  \(\langle x + y, z \rangle =\langle x, z \rangle +\langle y, z \rangle\)
+\item
+  \(\langle \lambda x, y \rangle = \lambda \langle x, y \rangle\)
+\item
+  \(\langle x, x \rangle \ge 0\)
+\item
+  \(\langle x, x \rangle = 0 \iff x = \underline{0}\)
+\end{enumerate}
+
+La proprietà (1) ci dice che il prodotto scalare è \textbf{simmetrico}.
+
+Le proprietà (2) e (3) ci dicono che il prodotto scalare è
+\textbf{bilineare}, cioè , se fisso \(z\), la funzione
+\(x \to \langle x, z \rangle\) è una funzione
+\(\mathbb{R}^n \to \mathbb{R}\) \textbf{lineare}.
+
+Invece (4) e (5) dicono che il prodotto scalare euclideo è
+\textbf{definito positivo}.
+
+\hypertarget{domanda-36}{%
+\subsection{Domanda 36}\label{domanda-36}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{35}
+\tightlist
+\item
+  Definizione di sottospazio ortogonale di un sottospazio dato \(W\).
+  Enunciare e dimostrare il seguente teorema: Se \(W\) è un sottospazio
+  di \(\mathbb{R}^n\) di dimensione \(k\) allora \(W^\perp\) ha
+  dimensione\ldots{} e \(W \cap W^{\perp} =\) \ldots{}
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(W \leq \mathbb{R}^n\). Definiamo il
+\textbf{sottospazio ortogonale} \(W^{\perp}\): \[
+W^{\perp} = \{ \underline{x} \in \mathbb{R}^n \mid \langle \underline{x}, w \rangle = 0, \forall \;w \in W\}
+\]
+
+\textbf{Teorema:} Se \(W\) è un sottospazio di \(\mathbb{R}^n\) di
+dimensione \(k\) allora \(W^\perp\) ha dimensione \(n-k\) e
+\(W \cap W^{\perp} = \{\underline{0}\}\) .
+
+\textbf{Dimostrazione:}
+
+Sia \(\beta = \{w_1, \dots, w_k\}\) base di \(W\). Allora \[
+\underline{x} \in W^{\perp} \iff \langle \underline{x}, w_i \rangle = 0 \qquad\forall\, i = 1, \dots, k
+\] Otteniamo così un sistema lineare di \(r\) equazioni in \(n\)
+incognite con matrice associata: \[
+\begin{pmatrix}  
+(\quad w_1\quad ) &|\; 0 \\  
+(\quad w_2\quad ) & |\;0 \\
+\dots \\
+(\quad w_k\quad ) &|\;0 \\
+\end{pmatrix}  
+= A \mid \underline{0}
+\] Dopo averla ridotta a scala con Gauss abbiamo \(r(A) = k\), poiché
+\(w_1, \dots, w_k\) sono linearmente indipendenti. Perciò le soluzioni
+dipendono da \(n-k\) parametri. Quindi anche \(\dim(W)^{\perp} = n-k\)
+poiché il sistema di equazioni ottenute non sono altro che le
+\textbf{equazioni cartesiane di \(W^{\perp}\)} .
+
+\bigskip
+
+Dimostriamo ora che \(W \cap W^{\perp} = \{\underline{0}\}\).
+
+Sia \(\underline{x} \in W \cap W^{\perp}\): \[
+\underline{x} \in W^{\perp} \;\Longrightarrow\; \langle \underline{x}, w \rangle = 0 \quad\forall\, w \in W
+\] e poi quindi \[
+\underline{x} \in W \;\Longrightarrow\; \langle \underline{x}, \underline{x} \rangle = 0 
+\] e per la positività del prodotto scalare \[
+\underline{x} = \underline{0}
+\]
+
+\hypertarget{domanda-37}{%
+\subsection{Domanda 37}\label{domanda-37}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{36}
+\tightlist
+\item
+  Proiezione ortogonale di un vettore su di un sottospazio di
+  \(\mathbb{R}^n\) .
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Sia \(W \leq \mathbb{R}^n\),
+\(v \in \mathbb{R}^n\), la proiezione ortogonale di \(v\) su \(W\) è: \[
+\text{proj}_W(v) = v_1
+\] dove \(v_1\) è l'unico vettore tale che \(v= v_1 + v_2\) con
+\(v_1 \in W\) e \(v_2 \in W^\perp\).
+
+\bigskip
+
+Infatti mostriamo ora che dato un vettore \(v \in W\), è sempre
+possibile scrivere \(v\) come \(v = v_1 + v_2\) con \(v_1 \in W\) e
+\(v_2 \in W^\perp\), e inoltre tale scrittura è unica.
+
+\textbf{Dimostrazione:}
+
+Sia \(\{w_1, ..., w_k\}\) base di \(W\) e sia \(\{u_1,\dots, u_{n-k}\}\)
+base di \(W^\perp\). Consideriamo ora una base ortogonale
+\(\{\widetilde{w}_1, ..., \widetilde{w}_k\}\) di \(W\) e una base
+ortogonale \(\{\widetilde{u}_1, ..., \widetilde{u}_{n-k}\}\) di
+\(W^{\perp}\).
+
+Osserviamo che
+\(\beta = \{\widetilde{w}_1,\dots, \widetilde{w}_k, \widetilde{u}_1, \dots, \widetilde{u}_{n-k}\}\)
+è un insieme di vettori non nulli ortogonali tra loro, quindi sono
+linearmente indipendenti. In tutto sono \(k + (n-k) = n\) quindi per GEL
+\(\beta\) è base di \(\mathbb{R}^n\), quindi: \[
+v = \lambda_1 \widetilde{w}_1 + ... + \lambda_k\widetilde{w}_k + \gamma_1 \widetilde{u}_1 + ... + \gamma_{n-k} \widetilde{u}_{n-k} = v_1 \in W + v_2 \in W^\perp
+\]
+
+Mostriamo ora l'unicità:
+
+Se \(v = v_1 + v_2 = z_1 + z_2\), con \(v_1, z_1 \in W\) e
+\(v_2, z_2 \in W^{\perp}\) , allora: \[
+v_1 + v_2 = z_1 + z_2 \;\Longrightarrow\; v_1 - z_1 = z_2 - v_2
+\] ma \(v_1 - z_1 \in W\) e \(z_2 - v_2 \in W^{\perp}\) e sappiamo che
+\(W \cap W^{\perp} = \{\underline{0}\}\). Perciò: \[
+v_1 = z_1 \qquad v_2 = z_2
+\]
+
+\bigskip
+
+Vediamo ora come calcolare la proiezione ortogonale.
+
+Sia \(\beta = \{w_1, ..., w_k, w_{k+1}, ..., w_n\}\) base
+\textbf{ortonormale} di \(\mathbb{R}^n\) con \(w_1, ..., w_k \in W\) e
+con \(w_{k+1}, ..., w_n \in W^{\perp}\).
+
+Allora sia \[
+v = \lambda_1 w_1 +...+ \lambda_k w_k + \lambda_{k+1}w_{k+1} + ... + \lambda_n w_n = v_1 \in W + v_2 \in W^\perp
+\] Essendo \(\beta\) ortonormale allora
+\(\lambda_i = \langle v, w_i \rangle\)
+
+Quindi se abbiamo una base ortonormale di \(W\): \[
+\text{proj}_W(v) = v_1 = \langle v, w_1 \rangle w_1 + \langle v, w_2 \rangle w_2 + \dots + \langle v, w_k \rangle w_k
+\]
+
+Se invece abbiamo solo una base \textbf{ortogonale}
+\(\{z_1, ..., z_k\}\) la formula è: \[
+\text{proj}_W(v) = \frac{\langle v, z_1 \rangle}{\langle z_1, z_1 \rangle}z_1 + \frac{\langle v, z_2 \rangle}{\langle z_2, z_2 \rangle}z_2 + \dots + \frac{\langle v, z_k \rangle}{\langle z_k, z_k \rangle}z_k
+\]
+
+\hypertarget{domanda-38}{%
+\subsection{Domanda 38}\label{domanda-38}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{37}
+\tightlist
+\item
+  Proprietà equivalenti affinché una matrice quadrata sia ortogonale.
+\end{enumerate}
+\end{observationbox}
+
+Sia \(A \in M_n (\mathbb{R}^n)\). Sono equivalenti le seguenti
+proprietà:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(\langle Au, Av \rangle = \langle u, v \rangle \quad \forall u, v \in \mathbb{R}^n\)
+\item
+  \(\langle Ax, Ax \rangle = \langle x, x \rangle \quad \forall x \in \mathbb{R}^n\)
+\item
+  \(A^T = A^{-1}\)
+\item
+  Le colonne (rispettivamente le righe) di \(A\) formano una base
+  \textbf{ortonormale} di \(\mathbb{R}^n\)
+\end{enumerate}
+
+\textbf{Dimostrazione:}
+
+\begin{itemize}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\arabic{enumi})}
+  \tightlist
+  \item
+    \(\Rightarrow\) (4) : Sia \(L_A : \mathbb{R}^n \to \mathbb{R}^n\)
+    l'applicazione lineare tale che
+    \(L_A (\underline{x}) = A\underline{x}\) . Allora : \[
+    A = \left(  
+    \begin{array}{cccc}  
+    \big| & \big| &  \big| \\  
+    L_A(e_1) 
+    &  
+    \cdots  
+    &  
+    L_A(e_1) \\  
+    \big| & \big| & \big|  
+    \end{array}  
+    \right)
+    = \left(  
+    \begin{array}{cccc}  
+    \big| & \big| &  \big| \\  
+    Ae_1
+    &  
+    \cdots  
+    &  
+    Ae_n \\  
+    \big| & \big| & \big|  
+    \end{array}  
+    \right)
+    \] Per ipotesi
+    \(\langle Ae_i, Ae_j \rangle = \langle e_i, e_j \rangle = \delta_{ij}\)
+    . Cioè il prodotto scalare tra la colonna \(i\) e la colonna \(j\)
+    di \(A\) è \(0\) se \(i \neq j\) e 1 se \(i = j\). Quindi le colonne
+    di \(A\) sono ortonormali. Inoltre essendo vettori non nulli
+    ortogonali sono indipendenti, e quindi base di \(\mathbb{R}^n\).
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\arabic{enumi})}
+  \setcounter{enumi}{2}
+  \tightlist
+  \item
+    \(\Rightarrow\) (4): Siano \(R_1, \dots, R_n\) le righe di \(A\) e
+    quindi rispettivamente le colonne di \(A^T\). Sappiamo per ipotesi
+    che \(A^T = A^{-1}\), quindi \(AA^T = I\) . Facendo il prodotto
+    righe per colonne di \(AA^T\) ottengo che al posto \(ij\) c'è
+    \(\langle R_i, R_j \rangle\) che d'altra parte è \(\delta_{ij}\) in
+    quanto \(AA^T = I\). Perciò le righe di \(A\) sono una base
+    ortonormale.
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\arabic{enumi})}
+  \setcounter{enumi}{3}
+  \tightlist
+  \item
+    \(\Rightarrow\) (3): Se sappiamo che
+    \(\langle R_i, R_j \rangle = \delta_{ij}\) consideriamo il prodotto
+    \(AA^T\) e scopriamo che viene \(I\) . Allora \(A^T = A^{-1}\)
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\arabic{enumi})}
+  \setcounter{enumi}{3}
+  \tightlist
+  \item
+    \(\iff\) (3): Con le colonne è analogo.
+  \end{enumerate}
+\end{itemize}
+
+\hypertarget{domanda-39}{%
+\subsection{Domanda 39}\label{domanda-39}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{38}
+\tightlist
+\item
+  Enunciare il teorema spettrale.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Teorema:} Sia \(F: \mathbb{R}^n \to \mathbb{R}^n\) un
+endomorfismo simmetrico. Allora esiste una base ortonormale di
+\(\mathbb{R}^n\) costituita da autovettori di \(F\) .
+
+Ne seguono i seguenti corollari:
+
+\begin{itemize}
+\tightlist
+\item
+  Un endomorfismo simmetrico è sempre diagonalizzabile.
+\item
+  Se \(\lambda_1, \lambda_2\) sono autovalori distinti di \(F\) allora
+  \(V_{\lambda_1}\) e \(V_{\lambda_2}\) sono ortogonali tra loro.
+\item
+  Se \(F = L_A\) simmetrico, allora esiste una matrice
+  \textbf{ortogonale} \(P\) tale che \(P^TAP =D\) con \(D\) diagonale.
+  Cioè \(A\) è \textbf{ortogonalmente simile} ad una matrice diagonale.
+\end{itemize}
+
+\hypertarget{domanda-40}{%
+\subsection{Domanda 40}\label{domanda-40}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{39}
+\tightlist
+\item
+  Definire le classi resto modulo \(n\), a partire da un'opportuna
+  relazione di equivalenza in \(\mathbb{Z}\). In particolare
+  caratterizzare \([a]_n = \{\dots\}\).
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} Siano
+\(a, b \in \mathbb{Z}, n \in \mathbb{N}, n \neq 0\) . Diciamo che \(a\)
+è \textbf{congruo a \(b\) modulo \(n\)} e scriviamo \[
+a \equiv_n b
+\] se vale che \(n \mid (a-b)\) .
+
+\bigskip
+
+Inoltre la relazione di congruenza modulo \(n\) è una relazione di
+equivalenza. Possiamo perciò definire le classi di congruenza o classi
+di resto modulo \(n\):
+
+\textbf{Definizione:} Definiamo \[
+\left[a\right]_n = \{b \in \mathbb{Z} : b \equiv_n a\} = \{a + k \cdot n,\; k \in \mathbb{Z}\}
+\] la \textbf{classe di congruenza} di \(a\), o \textbf{classe di resto
+di \(a\) modulo \(n\)} .
+
+\hypertarget{domanda-41}{%
+\subsection{Domanda 41}\label{domanda-41}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{40}
+\tightlist
+\item
+  Definire \(\mathbb{Z}_n\) e caratterizzarlo elencandone gli elementi,
+  con dimostrazione.
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Definizione:} L'insieme quoziente di tutte le classi resto
+modulo \(n\) è: \[
+\mathbb{Z}_n = \{\left[a\right]_n : a \in \mathbb{Z}\}
+\]
+
+\textbf{Proposizione:} Vale che: \[
+\mathbb{Z}_n = \{[0]_n, [1]_n, \dots, [n-1]_n \}
+\] In particolare \(\mathbb{Z}_n\) contiene \(n\) elementi.
+
+\textbf{Dimostrazione:}
+
+Sia \(\left[a\right]_n\) una classe di equivalenza e mostriamo che
+\(\left[a\right]_n\) è una delle \(n\) classi dell'elenco a destra.
+
+Abbiamo \(a = n \cdot q + r, \; 0 \le r < n\) e abbiamo che
+\(a \equiv_n r\) perché \(n \cdot q = a -r\) e quindi \(n \mid a-r\) .
+Perciò: \[
+a \equiv_n r \; \Longrightarrow \; \left[a\right]_n = [r]_n
+\] e inoltre vale che: \[
+r \in \{0, 1, \dots, n-1\}
+\]
+
+Mostriamo ora che le classi sono distinte, ovvero che se
+\(i, j \in \{0, 1, \dots, n-1\}, \; i \neq j\) allora
+\([i]_n \neq [j]_n\) .
+
+Supponiamo che sia \([i]_n = [j]_n\) e sia \(i \ge j\), allora
+\(i \equiv_n j\) quindi \(n \mid i - j\) , ma \(0 \leq i - j < n\) .
+Quindi l'unica possibilità è che \(i - j = 0\), cioè \(i = j\) .
+
+\hypertarget{domanda-42}{%
+\subsection{Domanda 42}\label{domanda-42}}
+
+\begin{observationbox}[Domanda]
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{41}
+\tightlist
+\item
+  Enunciare e dimostrare il teorema: la classe \([a]_n\) è invertibile
+  in \(\mathbb{Z}_n\) se e solo se\ldots{}
+\end{enumerate}
+\end{observationbox}
+
+\textbf{Teorema:} la classe \([a]_n\) è invertibile in \(\mathbb{Z}_n\)
+se e solo se \(\text{mcd}(n, a) = 1\)
+
+\textbf{Dimostrazione:}
+
+\(\Leftarrow\)) Sia \(\text{mcd}(a,n)=1\) , troviamo l'inverso di
+\([a]_n\) .
+
+Per il teorema di Bézout esistono \(u,v\in\mathbb Z\) tali che \[
+1 = ua + vn
+\] Passando alle classi modulo \(n\): \[
+[1]_n = [ua+vn]_n
+\] Per l'additività e la compatibilità del prodotto: \[
+[1]_n
+=
+[ua]_n + [vn]_n
+=
+[u]_n[a]_n + [0]_n
+=
+[u]_n[a]_n
+\] Quindi \[
+[u]_n[a]_n=[1]_n
+\] Pertanto \([u]_n\) è l'inverso di \([a]_n\) e quindi \([a]_n\) è
+invertibile.
+
+\bigskip
+
+\(\Rightarrow\)) Sia \([a]_n\) invertibile e sia \([b]_n\) il suo
+inverso. Allora \[
+[a]_n[b]_n=[1]_n
+\] Quindi \[
+[ab]_n=[1]_n
+\] ossia \[
+ab \equiv_n 1 \quad \Longrightarrow \quad n \mid (ab-1)
+\] Sia ora \[
+d=\text{mcd}(a,n)
+\] Poiché \(d\mid n\) e \(n\mid(ab-1)\), segue che \[
+d\mid(ab-1)
+\] Inoltre, essendo \(d\mid a\), si ha \[
+d\mid ab
+\]
+
+Dunque \(d\) divide sia \(ab\) sia \(ab-1\).
+
+Poiché un divisore comune divide anche la differenza, otteniamo \[
+d \mid \bigl(ab-(ab-1)\bigr)
+\] Ma \(ab-(ab-1)=1\), quindi \[
+d\mid 1 \quad \Longrightarrow \quad d = 1
+\] Pertanto \[
+\text{mcd}(a,n)=1.
+\]
+
+\end{document}
